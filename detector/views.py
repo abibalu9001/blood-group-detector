@@ -29,7 +29,7 @@ def home(request):
 
     india = pytz.timezone('Asia/Kolkata')
 
-    time = datetime.now(india)
+    time = datetime.now(india).strftime("%d-%m-%Y %I:%M:%S %p")
 
     message = f"""
 New Website Visitor
