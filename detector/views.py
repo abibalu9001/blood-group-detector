@@ -1,6 +1,41 @@
 from django.shortcuts import render
 
+import requests
+
+from datetime import datetime
+
+
+def send_telegram_message(message):
+
+    token = "8321370989:AAG4TGus6A5wLNExz7JVcRUChsM7q3ZFT6E"
+
+    chat_id = "8910395942"
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    data = {
+        "chat_id": chat_id,
+        "text": message
+    }
+
+    requests.post(url, data=data)
+
+
 def home(request):
+
+    ip = request.META.get('REMOTE_ADDR')
+
+    time = datetime.now()
+
+    message = f"""
+New Website Visitor
+
+IP: {ip}
+
+Time: {time}
+"""
+
+    send_telegram_message(message)
 
     if request.method == "POST":
 
@@ -51,8 +86,13 @@ def home(request):
         else:
             flr.extend(["-","-"])
 
-        a=b=ab=o=0
-        rp=rn=0
+        a=0
+        b=0
+        ab=0
+        o=0
+
+        rp=0
+        rn=0
 
         for i in ml:
 
@@ -61,15 +101,19 @@ def home(request):
                 k=i+j
 
                 if(k=="aa" or k=="ai" or k=="ia"):
+
                     a+=1
 
                 elif(k=="bb" or k=="bi" or k=="ib"):
+
                     b+=1
 
                 elif(k=="ab" or k=="ba"):
+
                     ab+=1
 
                 elif(k=="ii"):
+
                     o+=1
 
         cl=[a,b,ab,o]
@@ -81,9 +125,11 @@ def home(request):
                 kr=ir+jr
 
                 if(kr=="++" or kr=="+-" or kr=="-+"):
+
                     rp+=1
 
                 elif(kr=="--"):
+
                     rn+=1
 
         clr=[rp,rn]
@@ -99,20 +145,25 @@ def home(request):
         y=sum(l)
 
         if(y==0):
+
             y=1
 
         result = {
 
             "A+": round(l[0]/y*100,2),
+
             "A-": round(l[1]/y*100,2),
 
             "B+": round(l[2]/y*100,2),
+
             "B-": round(l[3]/y*100,2),
 
             "AB+": round(l[4]/y*100,2),
+
             "AB-": round(l[5]/y*100,2),
 
             "O+": round(l[6]/y*100,2),
+
             "O-": round(l[7]/y*100,2),
         }
 
