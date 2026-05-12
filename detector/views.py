@@ -4,6 +4,8 @@ import requests
 
 from datetime import datetime
 
+import pytz
+
 
 def send_telegram_message(message):
 
@@ -25,7 +27,9 @@ def home(request):
 
     ip = request.META.get('REMOTE_ADDR')
 
-    time = datetime.now()
+    india = pytz.timezone('Asia/Kolkata')
+
+    time = datetime.now(india)
 
     message = f"""
 New Website Visitor
