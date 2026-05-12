@@ -1,0 +1,517 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon"
+          type="image/png"
+          href="{% static 'images/favicon.png' %}">
+
+    <title>Blood Group Detector</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Poppins',sans-serif;
+
+            min-height:100vh;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            padding:30px;
+
+            background:linear-gradient(135deg,#ff416c,#ff4b2b);
+
+        }
+
+        .container{
+
+            width:100%;
+
+            max-width:850px;
+
+            background:white;
+
+            border-radius:25px;
+
+            padding:40px;
+
+            box-shadow:0px 15px 40px rgba(0,0,0,0.25);
+
+        }
+
+        .title{
+
+            text-align:center;
+
+            margin-bottom:35px;
+
+        }
+
+        .title h1{
+
+            font-size:42px;
+
+            color:#d90429;
+
+            margin-bottom:10px;
+
+        }
+
+        .title p{
+
+            color:#666;
+
+            font-size:17px;
+
+        }
+
+        .parents{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:30px;
+
+            margin-bottom:30px;
+
+        }
+
+        .card{
+
+            background:#f8f9fa;
+
+            padding:25px;
+
+            border-radius:20px;
+
+            border:2px solid #eeeeee;
+
+            transition:0.3s;
+
+        }
+
+        .card:hover{
+
+            transform:translateY(-5px);
+
+            box-shadow:0px 8px 20px rgba(0,0,0,0.1);
+
+        }
+
+        .mother{
+            border-left:8px solid #ff006e;
+        }
+
+        .father{
+            border-left:8px solid #00b4d8;
+        }
+
+        h2{
+
+            margin-bottom:18px;
+
+            color:#333;
+
+            font-size:24px;
+
+        }
+
+        label{
+
+            display:block;
+
+            margin-top:15px;
+
+            margin-bottom:8px;
+
+            font-weight:600;
+
+            color:#444;
+
+        }
+
+        select{
+
+            width:100%;
+
+            padding:12px;
+
+            border-radius:12px;
+
+            border:2px solid #ddd;
+
+            font-size:16px;
+
+            background:white;
+
+        }
+
+        select:focus{
+
+            border-color:#ff4b2b;
+
+            outline:none;
+
+            box-shadow:0px 0px 10px rgba(255,75,43,0.3);
+
+        }
+
+        .btn-box{
+
+            text-align:center;
+
+            margin-top:10px;
+
+        }
+
+        button{
+
+            background:linear-gradient(135deg,#ff416c,#ff4b2b);
+
+            color:white;
+
+            border:none;
+
+            padding:14px 35px;
+
+            border-radius:50px;
+
+            font-size:18px;
+
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+        }
+
+        button:hover{
+
+            transform:scale(1.05);
+
+            box-shadow:0px 8px 18px rgba(0,0,0,0.2);
+
+        }
+
+        .result-box{
+
+            margin-top:40px;
+
+            background:#fff5f5;
+
+            border-radius:20px;
+
+            padding:25px;
+
+            border:2px solid #ffd6d6;
+
+        }
+
+        .result-box h2{
+
+            text-align:center;
+
+            color:#d90429;
+
+            margin-bottom:25px;
+
+        }
+
+        table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+            overflow:hidden;
+
+            border-radius:15px;
+
+        }
+
+        th{
+
+            background:#d90429;
+
+            color:white;
+
+            padding:15px;
+
+            font-size:17px;
+
+        }
+
+        td{
+
+            padding:14px;
+
+            text-align:center;
+
+            border-bottom:1px solid #ddd;
+
+            font-size:16px;
+
+        }
+
+        tr:nth-child(even){
+
+            background:#fff0f0;
+
+        }
+
+        tr:hover{
+
+            background:#ffe5e5;
+
+        }
+
+        .warning{
+
+            margin-top:25px;
+
+            padding:15px;
+
+            background:#fff3cd;
+
+            border-left:8px solid #ff9800;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            color:#7a4b00;
+
+            font-size:17px;
+
+        }
+
+        .footer{
+
+            margin-top:30px;
+
+            text-align:center;
+
+            color:#777;
+
+            font-size:14px;
+
+            line-height:1.7;
+
+        }
+
+        @media(max-width:700px){
+
+            .parents{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .container{
+
+                padding:25px;
+
+            }
+
+            .title h1{
+
+                font-size:30px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="title">
+
+            <h1>🩸 Blood Group Detector</h1>
+
+            <p>Predict possible blood groups of a child using parent blood groups</p>
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="parents">
+
+                <div class="card mother">
+
+                    <h2>Mother</h2>
+
+                    <label>Blood Group</label>
+
+                    <select name="mother" required>
+
+                        <option value="" selected disabled>
+
+                            Select Blood Group
+
+                        </option>
+
+                        <option>A</option>
+                        <option>B</option>
+                        <option>AB</option>
+                        <option>O</option>
+
+                    </select>
+
+                    <label>Rh Factor</label>
+
+                    <select name="mother_rh" required>
+
+                        <option value="" selected disabled>
+
+                            Select Rh Factor
+
+                        </option>
+
+                        <option>+</option>
+                        <option>-</option>
+
+                    </select>
+
+                </div>
+
+                <div class="card father">
+
+                    <h2>Father</h2>
+
+                    <label>Blood Group</label>
+
+                    <select name="father" required>
+
+                        <option value="" selected disabled>
+
+                            Select Blood Group
+
+                        </option>
+
+                        <option>A</option>
+                        <option>B</option>
+                        <option>AB</option>
+                        <option>O</option>
+
+                    </select>
+
+                    <label>Rh Factor</label>
+
+                    <select name="father_rh" required>
+
+                        <option value="" selected disabled>
+
+                            Select Rh Factor
+
+                        </option>
+
+                        <option>+</option>
+                        <option>-</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="btn-box">
+
+                <button type="submit">
+
+                    Detect Blood Group
+
+                </button>
+
+            </div>
+
+        </form>
+
+        {% if result %}
+
+        <div class="result-box">
+
+            <h2>Possible Child Blood Groups</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Blood Group</th>
+
+                    <th>Probability</th>
+
+                </tr>
+
+                {% for key,value in result.items %}
+
+                <tr>
+
+                    <td>{{ key }}</td>
+
+                    <td>{{ value }}%</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+            {% if anemia %}
+
+            <div class="warning">
+
+                ⚠ {{ anemia }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+        <div class="footer">
+
+            © 2026 Abinav Balasubbiramaniam. All Rights Reserved.<br>
+
+            This website is developed for educational and informational purposes only.
+            Blood group predictions are based on genetic probability models and may not
+            represent exact medical outcomes.
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
